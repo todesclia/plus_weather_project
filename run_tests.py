@@ -11,7 +11,7 @@ from tests.test_generate_daily_summary import GenerateDailySummaryTests
 runner = unittest.TextTestRunner()
 
 print("Running Tests...\n")
-# runner.run(unittest.TestSuite((unittest.TestLoader().loadTestsFromTestCase(ConvertDateTests))))
+runner.run(unittest.TestSuite((unittest.TestLoader().loadTestsFromTestCase(ConvertDateTests))))
 runner.run(unittest.TestSuite((unittest.TestLoader().loadTestsFromTestCase(ConvertTempTests))))
 runner.run(unittest.TestSuite((unittest.TestLoader().loadTestsFromTestCase(CalculateMeanTests))))
 runner.run(unittest.TestSuite((unittest.TestLoader().loadTestsFromTestCase(LoadCSVTests))))
