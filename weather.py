@@ -111,15 +111,6 @@ def find_max(weather_data):
         result = ()
     #return the result
     return result
-
-def generate_summary(weather_data):
-    """Outputs a summary for the given weather data.
-
-    Args:
-        weather_data: A list of lists, where each sublist represents a day of weather data.
-    Returns:
-        A string containing the summary information.
-    """
     
 def generate_summary(weather_data):
     """Outputs a summary for the given weather data.
@@ -187,4 +178,39 @@ def generate_daily_summary(weather_data):
     Returns:
         A string containing the summary information.
     """
-    pass
+    # check there is weather data
+    if weather_data != []:
+        summaries = []
+
+        # iterate through the weather data
+        for each_row in weather_data:
+            date, low, high = each_row
+            min_temp = low
+            max_temp = high
+            days_date = date
+    
+            # conver the temp from fahrenheit to celsius
+            min_low_celsius = (min_temp - 32) * 5.0 / 9.0
+            max_high_celsius = (max_temp - 32) * 5.0 / 9.0
+
+            # Format the dates using strftime()
+            formatted_date = datetime.fromisoformat(days_date).strftime('%A %d %B %Y')
+
+            # Prepare the final summary string
+            # ---- Sunday 21 June 2020 ----
+            #   Minimum Temperature: 14.4°C
+            #   Maximum Temperature: 22.2°C
+
+            summary = (
+                f"---- {formatted_date} ----\n "
+                f" Minimum Temperature: {min_low_celsius:.1f}°C\n"
+                f"  Maximum Temperature: {max_high_celsius:.1f}°C\n"
+            ) 
+            summaries.append(summary)
+            final_summary = "\n".join(summaries)
+            final_summary = final_summary + "\n"
+
+    else:
+        return ()
+
+    return final_summary
