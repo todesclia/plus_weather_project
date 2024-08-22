@@ -48,7 +48,23 @@ def calculate_mean(weather_data):
     Returns:
         A float representing the mean value.
     """
-    pass
+    # check there is weather data
+    if weather_data != []:
+
+        # initialize variables  
+        total_temp = 0
+        number_of_days = len(weather_data)
+
+        # iterate through the weather data
+        for each_item in weather_data:
+            if each_item != []:
+                total_temp += float(each_item)
+
+        # calculate averages
+        avg_temp = total_temp / len(weather_data)
+        return(avg_temp)
+    else:
+        return()
 
 
 def load_data_from_csv(csv_file):
@@ -59,7 +75,19 @@ def load_data_from_csv(csv_file):
     Returns:
         A list of lists, where each sublist is a (non-empty) line in the csv file.
     """
-    pass
+    data_list = []
+    
+    with open(csv_file, encoding="utf-8") as my_file:
+        csv_reader = csv.reader(my_file)
+        next(csv_reader) # skip headers (first row)
+
+        for row in csv_reader:
+            if row:
+                # Convert the second and third elements to str
+                processed_row = [row[0], int(row[1]), int(row[2])]
+                data_list.append(processed_row)
+
+    return(data_list)
 
 
 def find_min(weather_data):
