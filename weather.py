@@ -154,45 +154,43 @@ def generate_summary(weather_data):
     if weather_data != []:
 
         # initialize variables
+        date_list = []
+        min_temp_list = []
+        max_temp_list = []
         min_low = weather_data[0][1]
-        min_low_date = weather_data[0][0]
         max_high = weather_data[0][2]
-        max_high_date = weather_data[0][0]
-        total_low = 0
-        total_high = 0
         number_of_days = len(weather_data)
 
         # iterate through the weather data
         for each_row in weather_data:
             if each_row != []:
-                date, low, high = each_row
-                # update min low temp and date
-                if low < min_low:
-                    min_low = low
-                    min_low_date = date
-                # update max high temp and date
-                if high > max_high:
-                    max_high = high
-                    max_high_date = date
-                # accumulate the totals for average calc
-                total_low += low
-                total_high += high
+                # date, low, high = each_row
+                date_list.append(each_row[0])
+                min_temp_list.append(each_row[1])
+                max_temp_list.append(each_row[2])
 
         # calculate averages
-        avg_low = total_low / len(weather_data)
-        avg_high = total_high / len(weather_data)
+        avg_low = calculate_mean(min_temp_list)
+        avg_high = calculate_mean(max_temp_list)
+
+        # find min temp
+        min_low, position1 = find_min(min_temp_list)
+        # find max temp
+        max_high, position2 = find_max(max_temp_list)
 
         # conver the temp from fahrenheit to celsius
-        min_low_celsius = (min_low - 32) * 5.0 / 9.0
-        max_high_celsius = (max_high - 32) * 5.0 / 9.0  
-        avg_low_celsius = (avg_low - 32) * 5.0 / 9.0            
-        avg_high_celsius = (avg_high - 32) * 5.0 / 9.0            
+        min_low_celsius = round(convert_f_to_c(min_low), 1)
+        max_high_celsius = round(convert_f_to_c(max_high), 1)
+        avg_low_celsius = round(convert_f_to_c(avg_low), 1)        
+        avg_high_celsius = round(convert_f_to_c(avg_high), 1)
+
         # Format the dates using strftime()
-        min_low_date_formatted = datetime.fromisoformat(min_low_date).strftime('%A %d %B %Y')
-        max_high_date_formatted = datetime.fromisoformat(max_high_date).strftime('%A %d %B %Y')
+        min_low_date_formatted = convert_date(date_list[position1])
+        max_high_date_formatted = convert_date(date_list[position2])
+
         # Prepare the final summary string
         summary = (
-        f"{number_of_days} Day Overview\n  The lowest temperature will be {min_low_celsius:.1f}°C, and will occur on {min_low_date_formatted}.\n  The highest temperature will be {max_high_celsius:.1f}°C, and will occur on {max_high_date_formatted}.\n  The average low this week is {avg_low_celsius:.1f}°C.\n  The average high this week is {avg_high_celsius:.1f}°C.\n"
+        f"{number_of_days} Day Overview\n  The lowest temperature will be {format_temperature(min_low_celsius)}, and will occur on {min_low_date_formatted}.\n  The highest temperature will be {format_temperature(max_high_celsius)}, and will occur on {max_high_date_formatted}.\n  The average low this week is {format_temperature(avg_low_celsius)}.\n  The average high this week is {format_temperature(avg_high_celsius)}.\n"
         )
     else:
         return ()
@@ -220,21 +218,17 @@ def generate_daily_summary(weather_data):
             days_date = date
     
             # conver the temp from fahrenheit to celsius
-            min_low_celsius = (min_temp - 32) * 5.0 / 9.0
-            max_high_celsius = (max_temp - 32) * 5.0 / 9.0
+            min_low_celsius = round(convert_f_to_c(min_temp), 1)
+            max_high_celsius = round(convert_f_to_c(max_temp), 1)
 
-            # Format the dates using strftime()
-            formatted_date = datetime.fromisoformat(days_date).strftime('%A %d %B %Y')
+            # Format the dates
+            formatted_date = convert_date(days_date)
 
             # Prepare the final summary string
-            # ---- Sunday 21 June 2020 ----
-            #   Minimum Temperature: 14.4°C
-            #   Maximum Temperature: 22.2°C
-
             summary = (
                 f"---- {formatted_date} ----\n "
-                f" Minimum Temperature: {min_low_celsius:.1f}°C\n"
-                f"  Maximum Temperature: {max_high_celsius:.1f}°C\n"
+                f" Minimum Temperature: {format_temperature(min_low_celsius)}\n"
+                f"  Maximum Temperature: {format_temperature(max_high_celsius)}\n"
             ) 
             summaries.append(summary)
             final_summary = "\n".join(summaries)
